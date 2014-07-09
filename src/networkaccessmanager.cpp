@@ -351,7 +351,6 @@ void NetworkAccessManager::provideAuthentication(QNetworkReply *reply, QAuthenti
     else
     {
         m_authAttempts = 0;
-        this->handleFinished(reply, 401, "Authorization Required");
         this->handleFinished(reply, 401, "Authorization Required", 0);
         reply->close();
     }
