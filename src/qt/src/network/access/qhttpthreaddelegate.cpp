@@ -538,12 +538,14 @@ void QHttpThreadDelegate::headerChangedSlot()
     incomingHeaders = httpReply->header();
     incomingStatusCode = httpReply->statusCode();
     incomingReasonPhrase = httpReply->reasonPhrase();
+    incomingPeerNetworkAddress = httpReply->peerNetworkAddress();
     isPipeliningUsed = httpReply->isPipeliningUsed();
     incomingContentLength = httpReply->contentLength();
 
     emit downloadMetaData(incomingHeaders,
                           incomingStatusCode,
                           incomingReasonPhrase,
+                          incomingPeerNetworkAddress,
                           isPipeliningUsed,
                           downloadBuffer,
                           incomingContentLength);

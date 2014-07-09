@@ -77,6 +77,17 @@ void QHttpNetworkReply::setUrl(const QUrl &url)
     d->url = url;
 }
 
+QVariant QHttpNetworkReply::peerNetworkAddress() const
+{
+   return d_func()->connectionChannel->socket->peerAddress().toString();
+}
+
+void QHttpNetworkReply::setPeerNetworkAddress(const QVariant &addr)
+{
+   Q_D(QHttpNetworkReply);
+   d->peerNetworkAddress = addr;
+}
+
 qint64 QHttpNetworkReply::contentLength() const
 {
     return d_func()->contentLength();

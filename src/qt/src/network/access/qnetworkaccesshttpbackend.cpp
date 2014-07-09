@@ -566,8 +566,8 @@ void QNetworkAccessHttpBackend::postRequest()
         connect(delegate, SIGNAL(downloadFinished()),
                 this, SLOT(replyFinished()),
                 Qt::QueuedConnection);
-        connect(delegate, SIGNAL(downloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,bool,QSharedPointer<char>,qint64)),
-                this, SLOT(replyDownloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,bool,QSharedPointer<char>,qint64)),
+        connect(delegate, SIGNAL(downloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,QVariant,bool,QSharedPointer<char>,qint64)),
+                this, SLOT(replyDownloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,QVariant,bool,QSharedPointer<char>,qint64)),
                 Qt::QueuedConnection);
         connect(delegate, SIGNAL(downloadProgress(qint64,qint64)),
                 this, SLOT(replyDownloadProgressSlot(qint64,qint64)),
@@ -654,6 +654,7 @@ void QNetworkAccessHttpBackend::postRequest()
                     (delegate->incomingHeaders,
                      delegate->incomingStatusCode,
                      delegate->incomingReasonPhrase,
+                     delegate->incomingPeerNetworkAddress,
                      delegate->isPipeliningUsed,
                      QSharedPointer<char>(),
                      delegate->incomingContentLength);
@@ -664,6 +665,7 @@ void QNetworkAccessHttpBackend::postRequest()
                     (delegate->incomingHeaders,
                      delegate->incomingStatusCode,
                      delegate->incomingReasonPhrase,
+                     delegate->incomingPeerNetworkAddress,
                      delegate->isPipeliningUsed,
                      QSharedPointer<char>(),
                      delegate->incomingContentLength);
@@ -773,12 +775,13 @@ void QNetworkAccessHttpBackend::checkForRedirect(const int statusCode)
 
 void QNetworkAccessHttpBackend::replyDownloadMetaData
         (QList<QPair<QByteArray,QByteArray> > hm,
-         int sc,QString rp,bool pu,
+         int sc,QString rp, QVariant pna, bool pu,
          QSharedPointer<char> db,
          qint64 contentLength)
 {
     statusCode = sc;
     reasonPhrase = rp;
+    peerNetworkAddress = pna;
 
     // Download buffer
     if (!db.isNull()) {
@@ -810,6 +813,7 @@ void QNetworkAccessHttpBackend::replyDownloadMetaData
 
     setAttribute(QNetworkRequest::HttpStatusCodeAttribute, statusCode);
     setAttribute(QNetworkRequest::HttpReasonPhraseAttribute, reasonPhrase);
+    setAttribute(QNetworkRequest::PeerNetworkAddressAttribute, peerNetworkAddress);
 
     // is it a redirection?
     checkForRedirect(statusCode);
