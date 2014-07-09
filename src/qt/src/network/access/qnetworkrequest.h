@@ -72,6 +72,7 @@ public:
         HttpStatusCodeAttribute,
         HttpReasonPhraseAttribute,
         RedirectionTargetAttribute,
+        PeerNetworkAddressAttribute,
         ConnectionEncryptedAttribute,
         CacheLoadControlAttribute,
         CacheSaveControlAttribute,
